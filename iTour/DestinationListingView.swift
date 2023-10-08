@@ -14,10 +14,15 @@ struct DestinationListingView: View {
     @Query(sort: [SortDescriptor(\Destination.priority, order: .reverse), SortDescriptor(\Destination.name)])
     private var destinations: [Destination]
 
-    init(sort: [SortDescriptor<Destination>], search: String = "") {
-        _destinations = Query(filter: #Predicate {
-            search.isEmpty || $0.name.localizedStandardContains(search)
-        }, sort: sort)
+    init(sort: [SortDescriptor<Destination>], search: String = "", upcomingOnly: Bool = false) {
+        let now = Date.now
+        _destinations = Query(
+            filter: #Predicate {
+                (search.isEmpty || $0.name.localizedStandardContains(search)) && 
+                (upcomingOnly == false || $0.date > now)
+            },
+            sort: sort
+        )
     }
 
     var body: some View {

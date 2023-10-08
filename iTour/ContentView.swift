@@ -14,13 +14,22 @@ struct ContentView: View {
     @State private var path = [Destination]()
     @State private var sortOrder = [SortDescriptor(\Destination.name), SortDescriptor(\Destination.name)]
     @State private var searchText = ""
+    @State private var upcomingOnly = false
 
     var body: some View {
         NavigationStack(path: $path) {
-            DestinationListingView(sort: sortOrder, search: searchText)
+            DestinationListingView(sort: sortOrder, search: searchText, upcomingOnly: upcomingOnly)
                 .navigationDestination(for: Destination.self, destination: EditDestinationView.init)
                 .navigationTitle("iTour")
                 .searchable(text: $searchText)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Upcoming", systemImage: "clock") {
+                            upcomingOnly.toggle()
+                        }
+                        .symbolVariant(upcomingOnly ? .fill : .none)
+                    }
+                }
                 .toolbar {
                     Button("Add Destination", systemImage: "plus", action: addDestination)
 
