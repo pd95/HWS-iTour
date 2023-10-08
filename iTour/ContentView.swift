@@ -12,7 +12,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
 
     @State private var path = [Destination]()
-    @State private var sortOrder = SortDescriptor(\Destination.name)
+    @State private var sortOrder = [SortDescriptor(\Destination.name), SortDescriptor(\Destination.name)]
     @State private var searchText = ""
 
     var body: some View {
@@ -25,7 +25,7 @@ struct ContentView: View {
                     Button("Add Destination", systemImage: "plus", action: addDestination)
 
                     Menu("Sort", systemImage: "arrow.up.arrow.down") {
-                        Picker("Sort", selection: $sortOrder) {
+                        Picker("Sort", selection: $sortOrder[0]) {
                             Text("Name")
                                 .tag(SortDescriptor(\Destination.name))
                             Text("Priority")

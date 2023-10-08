@@ -14,10 +14,10 @@ struct DestinationListingView: View {
     @Query(sort: [SortDescriptor(\Destination.priority, order: .reverse), SortDescriptor(\Destination.name)])
     private var destinations: [Destination]
 
-    init(sort: SortDescriptor<Destination>, search: String = "") {
+    init(sort: [SortDescriptor<Destination>], search: String = "") {
         _destinations = Query(filter: #Predicate {
             search.isEmpty || $0.name.localizedStandardContains(search)
-        }, sort: [sort])
+        }, sort: sort)
     }
 
     var body: some View {
@@ -54,7 +54,7 @@ struct DestinationListingView: View {
         container.mainContext.insert(rome)
         container.mainContext.insert(florence)
         container.mainContext.insert(naples)
-        return DestinationListingView(sort: SortDescriptor(\Destination.name))
+        return DestinationListingView(sort: [SortDescriptor(\Destination.name)])
             .modelContainer(container)
     } catch {
         fatalError("Something went wrong!")
